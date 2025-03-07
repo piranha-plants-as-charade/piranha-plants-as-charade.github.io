@@ -1,0 +1,115 @@
+.container {
+  --light: hsl(3, 100%, 96%);
+  --medium: hsl(3, 100%, 64%);
+  --dark: hsl(3, 61%, 51%);
+  --shadow-medium: hsla(3, 100%, 64%, 0.33);
+  --shadow-dark: hsla(3, 61%, 51%, 0.33);
+
+  margin: 48px 0;
+  position: relative;
+  text-align: center;
+  height: 96px;
+}
+body[data-theme="dark"] .container {
+  --light: hsl(3, 8%, 21%);
+}
+
+.container > button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 500;
+  text-transform: uppercase;
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 24px;
+  border: 2px solid var(--medium);
+  color: var(--medium);
+  background-color: var(--light);
+  box-shadow: 0 5px 20px 0 var(--shadow-medium);
+}
+.container > button::before {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  padding-right: 0.33em;
+}
+
+.container > button:hover {
+  background-color: var(--medium);
+  color: white;
+}
+
+.container > button:active {
+  background-color: var(--dark);
+  border-color: var(--dark);
+  color: white;
+  box-shadow: 0 5px 20px 0 var(--shadow-dark);
+}
+
+.container > button:disabled {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  cursor: auto;
+  color: var(--medium-color);
+}
+
+.container[data-state="readyToPlay"] > button {
+  background-color: var(--bg-color);
+  border-color: var(--dark-color);
+  box-shadow: none;
+  color: var(--dark-color);
+}
+
+.container[data-state="readyToPlay"] > button:hover {
+  background-color: var(--dark-color);
+  color: var(--bg-color);
+}
+
+.container[data-state="readyToPlay"] > button:active {
+  background-color: var(--medium-color);
+  border-color: var(--medium-color);
+  color: var(--bg-color);
+}
+
+.container[data-state="loading"] > button::before {
+  content: "";
+}
+.container[data-state="loading"] > button::after {
+  content: "Loading...";
+}
+
+.container[data-state="readyToRecord"] > button::before {
+  content: "\e837";
+}
+.container[data-state="readyToRecord"] > button::after {
+  content: "Record";
+}
+
+.container[data-state="recording"] > button::before {
+  content: "\ef71";
+}
+.container[data-state="recording"] > button::after {
+  content: "Stop";
+}
+
+.container[data-state="generating"] > button::before {
+  content: "";
+}
+.container[data-state="generating"] > button::after {
+  content: "Generating...";
+}
+
+.container[data-state="readyToPlay"] > button::before {
+  content: "\e1c4";
+}
+.container[data-state="readyToPlay"] > button::after {
+  content: "Play";
+}
