@@ -1,3 +1,4 @@
+import { default as cls } from "classnames";
 import { useRef, useEffect, useReducer } from "react";
 import styles from "@/styles/Recorder.module.css";
 
@@ -6,7 +7,8 @@ enum RecordingState {
   ReadyToRecord = "readyToRecord",
   Recording = "recording",
   Generating = "generating",
-  ReadyToPlay = "readyToPlay",
+  Paused = "paused",
+  Playing = "playing",
 }
 
 const createFileFromChunks = (
@@ -31,14 +33,23 @@ const fetchGenerate = async (file: File) => {
 
 interface RecorderProps {
   bufferSize: number;
+  downloadURL: string | undefined;
+  setDownloadURL: (url: string | undefined) => void;
 }
 
-const Recorder = ({ bufferSize }: RecorderProps) => {
+const Recorder = ({
+  bufferSize,
+  downloadURL,
+  setDownloadURL,
+}: RecorderProps) => {
   const recordingStateRef = useRef<RecordingState>(RecordingState.Loading);
-  const [recordingState, setRecordingState] = useReducer((prev, action) => {
-    recordingStateRef.current = action;
-    return action;
-  }, RecordingState.Loading);
+  const [recordingState, setRecordingState] = useReducer(
+    (prev, val: RecordingState) => {
+      recordingStateRef.current = val;
+      return val;
+    },
+    RecordingState.Loading
+  );
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -51,8 +62,10 @@ const Recorder = ({ bufferSize }: RecorderProps) => {
     if (!containerRef.current) {
       return "black";
     }
-    return getComputedStyle(containerRef.current).getPropertyValue("--medium");
-  }
+    return getComputedStyle(containerRef.current).getPropertyValue(
+      "--button-color"
+    );
+  };
 
   const visualizeAudioStream = () => {
     const canvasCtx = visualizerRef.current!.getContext("2d")!;
@@ -110,6 +123,7 @@ const Recorder = ({ bufferSize }: RecorderProps) => {
     const recorder = new MediaRecorder(audioStream.current!, {
       mimeType: "audio/webm",
     });
+    recordedChunks.current = [];
 
     recorder.onstart = () => {
       setRecordingState(RecordingState.Recording);
@@ -127,20 +141,17 @@ const Recorder = ({ bufferSize }: RecorderProps) => {
       const file = createFileFromChunks(recordedChunks.current, "file.webm", {
         type: recorder.mimeType,
       });
-
       const url = window.URL.createObjectURL(
-        new Blob([await fetchGenerate(file)], { type: "audio/webm" })
+        new Blob([await fetchGenerate(file)], { type: "audio/wav" })
       );
-      audioRef.current!.src = url;
+      setDownloadURL(url);
 
-      setRecordingState(RecordingState.ReadyToPlay);
-
-      recordedChunks.current = [];
+      setRecordingState(RecordingState.Paused);
     };
     return recorder;
   };
 
-  const onClick = () => {
+  const handleButtonClick = () => {
     switch (recordingState) {
       case RecordingState.ReadyToRecord:
         mediaRecorder.current!.start();
@@ -148,12 +159,26 @@ const Recorder = ({ bufferSize }: RecorderProps) => {
       case RecordingState.Recording:
         mediaRecorder.current!.stop();
         break;
-      case RecordingState.ReadyToPlay:
-        open(audioRef.current!.src, "_blank");
+      case RecordingState.Paused:
+        audioRef.current!.play();
+        break;
+      case RecordingState.Playing:
+        audioRef.current!.pause();
         break;
       default:
         break;
     }
+  };
+
+  const handleAudioPlay = () => {
+    setRecordingState(RecordingState.Playing);
+  };
+  const handleAudioPause = () => {
+    setRecordingState(RecordingState.Paused);
+  };
+  const handleAudioEnd = () => {
+    audioRef.current!.pause();
+    audioRef.current!.currentTime = 0;
   };
 
   useEffect(() => {
@@ -183,15 +208,21 @@ const Recorder = ({ bufferSize }: RecorderProps) => {
       data-state={recordingState.valueOf()}
     >
       <button
-        className={styles.recordButton}
-        onClick={onClick}
+        className={cls("icon", styles.recordButton)}
+        onClick={handleButtonClick}
         disabled={
           recordingState === RecordingState.Loading ||
           recordingState === RecordingState.Generating
         }
       />
       <canvas ref={visualizerRef} className={styles.visualizer} />
-      <audio ref={audioRef} />
+      <audio
+        ref={audioRef}
+        src={downloadURL}
+        onPlay={handleAudioPlay}
+        onPause={handleAudioPause}
+        onEnded={handleAudioEnd}
+      />
     </div>
   );
 };

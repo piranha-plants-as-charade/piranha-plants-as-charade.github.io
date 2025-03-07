@@ -3,11 +3,11 @@
 
 body {
   color: var(--dark-color);
-  background: var(--bg-color);
+  background: var(--background-color);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 17px;
-  line-height: 2;
+  line-height: 1.5;
   text-align: center;
 }
 
@@ -26,4 +26,14 @@ a {
 button {
   font: inherit;
   cursor: pointer;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+}
+.icon::before {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  padding-right: 0.33em;
 }

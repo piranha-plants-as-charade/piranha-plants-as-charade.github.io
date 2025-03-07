@@ -1,20 +1,19 @@
 .container {
-  --light: hsl(3, 100%, 96%);
-  --medium: hsl(3, 100%, 64%);
-  --dark: hsl(3, 61%, 51%);
-  --shadow-medium: hsla(3, 100%, 64%, 0.33);
-  --shadow-dark: hsla(3, 61%, 51%, 0.33);
+  --button-color: hsl(3, 100%, 64%);
+  --button-hover-color: hsl(3, 61%, 51%);
+  --button-background-color: hsl(3, 100%, 96%);
+  --button-shadow-color: hsl(3, 100%, 83%);
+  --button-shadow-hover-color: hsl(3, 56%, 72%);
 
-  margin: 48px 0;
   position: relative;
   text-align: center;
   height: 96px;
 }
 body[data-theme="dark"] .container {
-  --light: hsl(3, 8%, 21%);
+  --button-background-color: hsl(3, 8%, 21%);
 }
 
-.container > button {
+.container > .recordButton {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -29,87 +28,93 @@ body[data-theme="dark"] .container {
   height: 48px;
   padding: 0 16px;
   border-radius: 24px;
-  border: 2px solid var(--medium);
-  color: var(--medium);
-  background-color: var(--light);
-  box-shadow: 0 5px 20px 0 var(--shadow-medium);
-}
-.container > button::before {
-  font-family: "Material Symbols Outlined";
-  font-weight: normal;
-  padding-right: 0.33em;
+  border: 2px solid var(--button-color);
+  color: var(--button-color);
+  background-color: var(--button-background-color);
+  box-shadow: 0 5px 20px 0 var(--button-shadow-color);
+  white-space: nowrap;
 }
 
-.container > button:hover {
-  background-color: var(--medium);
+.container > .recordButton:hover {
+  background-color: var(--button-color);
   color: white;
 }
 
-.container > button:active {
-  background-color: var(--dark);
-  border-color: var(--dark);
+.container > .recordButton:active {
+  background-color: var(--button-hover-color);
+  border-color: var(--button-hover-color);
   color: white;
-  box-shadow: 0 5px 20px 0 var(--shadow-dark);
+  box-shadow: 0 5px 20px 0 var(--button-shadow-hover-color);
 }
 
-.container > button:disabled {
+.container > .recordButton:disabled {
   background-color: transparent;
   border: none;
   outline: none;
   box-shadow: none;
   cursor: auto;
-  color: var(--medium-color);
-}
-
-.container[data-state="readyToPlay"] > button {
-  background-color: var(--bg-color);
-  border-color: var(--dark-color);
-  box-shadow: none;
   color: var(--dark-color);
 }
 
-.container[data-state="readyToPlay"] > button:hover {
+.container[data-state="paused"] > .recordButton,
+.container[data-state="playing"] > .recordButton {
+  background-color: var(--background-2-color);
+  border-color: var(--dark-color);
+  box-shadow: none;
+  color: var(--dark-color);
+  box-shadow: 0px 5px 20px 0 var(--light-color);
+}
+
+.container[data-state="paused"] > .recordButton:hover,
+.container[data-state="playing"] > .recordButton:hover {
   background-color: var(--dark-color);
-  color: var(--bg-color);
+  color: var(--background-2-color);
 }
 
-.container[data-state="readyToPlay"] > button:active {
-  background-color: var(--medium-color);
-  border-color: var(--medium-color);
-  color: var(--bg-color);
+.container[data-state="paused"] > .recordButton:active,
+.container[data-state="playing"] > .recordButton:active {
+  background-color: var(--dark-color);
+  color: var(--background-color);
 }
 
-.container[data-state="loading"] > button::before {
+.container[data-state="loading"] > .recordButton::before {
   content: "";
 }
-.container[data-state="loading"] > button::after {
+.container[data-state="loading"] > .recordButton::after {
   content: "Loading...";
 }
 
-.container[data-state="readyToRecord"] > button::before {
+.container[data-state="readyToRecord"] > .recordButton::before {
   content: "\e837";
 }
-.container[data-state="readyToRecord"] > button::after {
+.container[data-state="readyToRecord"] > .recordButton::after {
   content: "Record";
 }
 
-.container[data-state="recording"] > button::before {
-  content: "\ef71";
+.container[data-state="recording"] > .recordButton::before {
+  content: "\e047";
 }
-.container[data-state="recording"] > button::after {
+.container[data-state="recording"] > .recordButton::after {
   content: "Stop";
 }
 
-.container[data-state="generating"] > button::before {
+.container[data-state="generating"] > .recordButton::before {
   content: "";
 }
-.container[data-state="generating"] > button::after {
-  content: "Generating...";
+.container[data-state="generating"] > .recordButton::after {
+  content: "Piranha-fiying Song...";
 }
 
-.container[data-state="readyToPlay"] > button::before {
-  content: "\e1c4";
+.container[data-state="paused"] > .recordButton::before {
+  content: "\e037";
 }
-.container[data-state="readyToPlay"] > button::after {
+.container[data-state="paused"] > .recordButton::after {
   content: "Play";
+}
+
+.container[data-state="playing"] > .recordButton::before {
+  content: "\e034";
+}
+.container[data-state="playing"] > .recordButton::after {
+  content: "Pause";
 }

@@ -1,35 +1,54 @@
-div.page {
+.page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  padding: 0 32px;
   font-family: var(--font-open-sans), sans-serif;
 }
 
-div.page > main {
+.main {
+  padding: 48px 0;
   flex-grow: 1;
 }
 
-footer.footer {
-  padding: 32px 0 48px 0;
+.footer {
+  padding: 48px 0;
   border-top: 1px solid var(--light-color);
 }
 
-footer.footer > ul.links {
+.footer > ul.links {
   list-style-type: none;
   display: flex;
   justify-content: center;
 }
-footer.footer > ul.links > li:not(:first-child)::before {
-  content: "\2022";
-  padding: 0 0.33em;
+.footer > ul.links > li:not(:first-child)::before {
+  content: "";
+  padding-left: 1em;
 }
 
-img.logo {
-  margin-top: 64px;
+.footer > ul.links > li a.report::before {
+  content: "\e873";
+}
+.footer > ul.links > li a.github::before {
+  content: "\e86f";
+}
+
+.logo {
+  margin-top: 16px;
+  height: 25vh;
   user-select: none;
   -moz-user-select: none;
 }
 
-h1.title {
+.title {
   font-family: var(--font-barrio), cursive;
+  margin-bottom: 48px;
+}
+
+.downloadLink::before {
+  content: "\f090";
+}
+
+.recorderWrapper {
+  margin: 0 -32px;
 }
