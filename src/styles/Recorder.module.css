@@ -1,16 +1,43 @@
 .container {
-  --button-color: hsl(3, 100%, 64%);
-  --button-hover-color: hsl(3, 61%, 51%);
-  --button-background-color: hsl(3, 100%, 96%);
-  --button-shadow-color: hsl(3, 100%, 83%);
-  --button-shadow-hover-color: hsl(3, 56%, 72%);
+  --button-hue: 3;
+  --button-lightness: 1;
+  --button-color: hsl(
+    var(--button-hue),
+    100%,
+    calc(64% * var(--button-lightness))
+  );
+  --button-hover-color: hsl(
+    var(--button-hue),
+    61%,
+    calc(51% * var(--button-lightness))
+  );
+  --button-background-color: hsl(var(--button-hue), 100%, 98%);
+  --button-shadow-color: hsla(
+    var(--button-hue),
+    100%,
+    calc(64% * var(--button-lightness)),
+    25%
+  );
+  --button-shadow-hover-color: hsla(
+    var(--button-hue),
+    61%,
+    calc(51% * var(--button-lightness)),
+    25%
+  );
+}
+body[data-theme="dark"] .container {
+  --button-background-color: hsl(var(--button-hue), 8%, 21%);
+}
+.container[data-state="paused"],
+.container[data-state="playing"] {
+  --button-hue: 138;
+  --button-lightness: 0.5;
+}
 
+.container {
   position: relative;
   text-align: center;
   height: 96px;
-}
-body[data-theme="dark"] .container {
-  --button-background-color: hsl(3, 8%, 21%);
 }
 
 .container > .recordButton {
@@ -31,7 +58,7 @@ body[data-theme="dark"] .container {
   border: 2px solid var(--button-color);
   color: var(--button-color);
   background-color: var(--button-background-color);
-  box-shadow: 0 5px 20px 0 var(--button-shadow-color);
+  box-shadow: 0 3px 15px 0 var(--button-shadow-color);
   white-space: nowrap;
 }
 
@@ -44,7 +71,7 @@ body[data-theme="dark"] .container {
   background-color: var(--button-hover-color);
   border-color: var(--button-hover-color);
   color: white;
-  box-shadow: 0 5px 20px 0 var(--button-shadow-hover-color);
+  box-shadow: 0 3px 15px 0 var(--button-shadow-hover-color);
 }
 
 .container > .recordButton:disabled {
@@ -54,27 +81,6 @@ body[data-theme="dark"] .container {
   box-shadow: none;
   cursor: auto;
   color: var(--dark-color);
-}
-
-.container[data-state="paused"] > .recordButton,
-.container[data-state="playing"] > .recordButton {
-  background-color: var(--background-2-color);
-  border-color: var(--dark-color);
-  box-shadow: none;
-  color: var(--dark-color);
-  box-shadow: 0px 5px 20px 0 var(--light-color);
-}
-
-.container[data-state="paused"] > .recordButton:hover,
-.container[data-state="playing"] > .recordButton:hover {
-  background-color: var(--dark-color);
-  color: var(--background-2-color);
-}
-
-.container[data-state="paused"] > .recordButton:active,
-.container[data-state="playing"] > .recordButton:active {
-  background-color: var(--dark-color);
-  color: var(--background-color);
 }
 
 .container[data-state="loading"] > .recordButton::before {

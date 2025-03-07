@@ -42,8 +42,9 @@ const Home = () => {
       />
       <div className={cls(styles.page, openSans.variable, barrio.variable)}>
         <main className={styles.main}>
+          {/* Image source: https://www.pinclipart.com/downpngs/iomoxw_super-mario-clipart-piranha-plant-mario-piranha-plant/ */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className={styles.logo} src="/hero.webp" alt="Logo" />
+          <img className={styles.logo} src="/hero.png" alt="Logo" />
           <h1 className={styles.title}>Piranha Plants as Charade</h1>
           <div className={styles.recorderWrapper}>
             <Recorder

@@ -20,10 +20,7 @@
   list-style-type: none;
   display: flex;
   justify-content: center;
-}
-.footer > ul.links > li:not(:first-child)::before {
-  content: "";
-  padding-left: 1em;
+  gap: 1em;
 }
 
 .footer > ul.links > li a.report::before {
@@ -34,10 +31,11 @@
 }
 
 .logo {
-  margin-top: 16px;
   height: 25vh;
+  padding: 16px;
   user-select: none;
   -moz-user-select: none;
+  filter: contrast(67%) brightness(115%);
 }
 
 .title {
