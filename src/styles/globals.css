@@ -61,11 +61,6 @@ th {
   text-align: left;
   padding: 12px 16px;
 }
-td:not(:first-child)::before,
-th:not(:first-child)::before {
-  content: "";
-  padding-right: 16px;
-}
 
 th {
   background-color: var(--dark-color);
