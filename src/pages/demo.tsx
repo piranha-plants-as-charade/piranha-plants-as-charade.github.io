@@ -1,7 +1,7 @@
 import { App } from "@/components/App";
 
 const Home = () => {
-  return <App showBlog />;
+  return <App />;
 };
 
 export default Home;
