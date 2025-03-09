@@ -1,0 +1,48 @@
+.button {
+  position: relative;
+  margin: 0;
+  padding: 0 8px;
+  width: 120px;
+  height: 32px;
+  border: 1px solid var(--dark-color);
+  border-radius: 16px;
+  background-color: var(--dark-color);
+  color: var(--background-color);
+  overflow: hidden;
+}
+.button:hover,
+.button:active {
+  background-color: var(--extra-light-color);
+  color: var(--dark-color);
+}
+
+.button::before {
+  z-index: 1;
+  content: "\e037";
+}
+
+.button.playing::before {
+  content: "\e034";
+}
+
+.button > .time {
+  z-index: 1;
+  flex-grow: 1;
+  width: 100%;
+  text-align: right;
+  user-select: none;
+  -moz-user-select: none;
+}
+
+.button > .timeline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  background-color: var(--medium-color);
+}
+.button:hover > .timeline,
+.button:active > .timeline {
+  background-color: var(--light-color);
+}

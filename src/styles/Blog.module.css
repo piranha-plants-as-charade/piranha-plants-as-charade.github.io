@@ -1,0 +1,25 @@
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.howItWorksSteps > li:not(:last-child) {
+  margin-bottom: 0.5em;
+}
+
+.resultsTable {
+  margin: 1em auto;
+}
+
+.footer {
+  border-bottom: none;
+}
+
+.footer .personalWebsite::before {
+  content: '\e88a';
+}
+
+.footer .linkedIn::before {
+  content: '\e7fd';
+}

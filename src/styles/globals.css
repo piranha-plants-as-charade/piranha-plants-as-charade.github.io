@@ -1,24 +1,37 @@
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0");
 @import url("https://www.maxhuang.dev/src/css/theme.css");
 
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
+  margin: 0;
+  padding: 0;
   color: var(--dark-color);
   background: var(--background-color);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 17px;
-  line-height: 1.5;
+  line-height: 1.7;
   text-align: center;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-align: center;
 }
 
 a {
-  color: inherit;
+  color: var(--accent-2-color);
   text-decoration: none;
   cursor: pointer;
 }
@@ -26,6 +39,45 @@ a {
 button {
   font: inherit;
   cursor: pointer;
+}
+
+audio {
+  max-width: 240px;
+  display: flex;
+}
+
+table {
+  border-radius: 5px;
+  border-collapse: collapse;
+  overflow: hidden;
+  margin: 1em 0;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  color: var(--dark-color);
+}
+
+td,
+th {
+  font-size: 15px;
+  text-align: left;
+  padding: 12px 16px;
+}
+td:not(:first-child)::before,
+th:not(:first-child)::before {
+  content: "";
+  padding-right: 16px;
+}
+
+th {
+  background-color: var(--dark-color);
+  color: var(--background-color);
+  border-color: var(--medium-color);
+}
+
+tr {
+  background-color: var(--background-color);
+}
+tr:nth-child(odd) > td {
+  background-color: var(--extra-light-color);
 }
 
 .icon {
@@ -36,4 +88,25 @@ button {
   font-family: "Material Symbols Outlined";
   font-weight: normal;
   padding-right: 0.33em;
+}
+
+.link-section {
+  width: 100%;
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  padding: 48px 0;
+  margin: 0;
+  margin-top: 48px;
+  border-top: 1px dashed var(--light-color);
+  border-bottom: 1px dashed var(--light-color);
+}
+
+.link-section > li {
+  display: inline;
+}
+
+.link-section a {
+  color: inherit;
 }
