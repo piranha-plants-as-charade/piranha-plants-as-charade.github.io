@@ -1,5 +1,5 @@
 import { default as cls } from "classnames";
-import { useRef, useEffect, useState, useReducer } from "react";
+import { useRef, useEffect, useState, useReducer, ReactNode } from "react";
 import styles from "@/styles/Recorder.module.css";
 
 enum State {
@@ -26,9 +26,15 @@ const fetchGenerate = async (file: File) => {
   formData.append("file", file);
 
   const response = await fetch("http://localhost:8000/generate", {
+    headers: {
+      Authorization: "Bearer " + (process.env.NEXT_PUBLIC_BE_AUTH_TOKEN ?? ""), // FIXME: secure this?
+    },
     method: "POST",
     body: formData,
   });
+  if (response.status !== 200) {
+    throw new Error("Failed to generate accompaniment.");
+  }
   return await response.bytes();
 };
 
@@ -48,7 +54,7 @@ const Recorder = ({
     stateRef.current = val;
     return val;
   }, State.Loading);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<ReactNode>(<></>);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -77,21 +83,21 @@ const Recorder = ({
     source.connect(analyser);
 
     const draw = () => {
-      requestAnimationFrame(draw);
-
       const { width, height } = visualizerRef.current!;
 
-      analyser.getByteTimeDomainData(dataArray);
-
       canvasCtx.clearRect(0, 0, width, height);
-
-      canvasCtx.lineWidth = 2;
-      canvasCtx.lineJoin = "round";
-      canvasCtx.strokeStyle = getLineColor();
 
       if (stateRef.current !== State.Recording) {
         return;
       }
+
+      requestAnimationFrame(draw);
+
+      analyser.getByteTimeDomainData(dataArray);
+
+      canvasCtx.lineWidth = 2;
+      canvasCtx.lineJoin = "round";
+      canvasCtx.strokeStyle = getLineColor();
 
       canvasCtx.beginPath();
 
@@ -135,16 +141,32 @@ const Recorder = ({
 
     recorder.onstop = async () => {
       setState(State.Generating);
-
-      const file = createFileFromChunks(recordedChunks.current, "file.webm", {
-        type: recorder.mimeType,
-      });
-      const url = window.URL.createObjectURL(
-        new Blob([await fetchGenerate(file)], { type: "audio/wav" })
-      );
-      setDownloadURL(url);
-
-      setState(State.Paused);
+      try {
+        const file = createFileFromChunks(recordedChunks.current, "file.webm", {
+          type: recorder.mimeType,
+        });
+        const generated = await fetchGenerate(file);
+        const url = window.URL.createObjectURL(
+          new Blob([generated], { type: "audio/wav" })
+        );
+        setDownloadURL(url);
+        setState(State.Paused);
+      } catch {
+        setErrorMessage(
+          <span>
+            Something went wrong.{" "}
+            <button
+              className={styles.tryAgainButton}
+              onClick={() => {
+                mediaRecorder.current!.start();
+              }}
+            >
+              Try again?
+            </button>
+          </span>
+        );
+        setState(State.Error);
+      }
     };
     return recorder;
   };
@@ -180,6 +202,12 @@ const Recorder = ({
   };
 
   useEffect(() => {
+    if (stateRef.current == State.Recording) {
+      visualizeAudioStream();
+    }
+  }, [stateRef.current]);
+
+  useEffect(() => {
     const resizeVisualizer = () => {
       visualizerRef.current!.width = containerRef.current!.offsetWidth;
       visualizerRef.current!.height = containerRef.current!.offsetHeight;
@@ -194,7 +222,6 @@ const Recorder = ({
         audioStream.current = await navigator.mediaDevices.getUserMedia({
           audio: true,
         });
-        visualizeAudioStream();
         mediaRecorder.current = await createMediaRecorder();
         setState(State.ReadyToRecord);
       } catch {
