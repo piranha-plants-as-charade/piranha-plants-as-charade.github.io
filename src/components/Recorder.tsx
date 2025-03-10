@@ -80,7 +80,7 @@ const Recorder = ({
         <span>
           Something went wrong.{" "}
           <button
-            className={cls("ghost-button", styles.tryAgainButton)}
+            className="ghost-button"
             onClick={() => {
               setState(State.ReadyToRecord);
             }}
@@ -229,7 +229,19 @@ const Recorder = ({
         mediaRecorder.current = await createMediaRecorder();
         setState(State.ReadyToRecord);
       } catch {
-        setErrorMessage("Failed to initialize the recording process.");
+        setErrorMessage(
+          <>
+            Failed to initialize the recording process.{" "}
+            <button
+              className="ghost-button"
+              onClick={() => {
+                inputFileRef.current!.click();
+              }}
+            >
+              Upload a file instead?
+            </button>
+          </>
+        );
         setState(State.Error);
       }
     }, 0);

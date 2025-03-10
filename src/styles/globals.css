@@ -75,11 +75,9 @@ tr:nth-child(odd) > td {
   background-color: var(--extra-light-color);
 }
 
-.icon {
-  display: inline-flex;
-  align-items: center;
-}
 .icon::before {
+  display: inline;
+  vertical-align: bottom;
   font-family: "Material Symbols Outlined";
   font-weight: normal;
   padding-right: 0.33em;
