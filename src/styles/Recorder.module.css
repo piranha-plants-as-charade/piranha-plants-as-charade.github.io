@@ -136,7 +136,7 @@ body[data-theme="dark"] .container {
   content: "Pause";
 }
 
-.tryAgainButton {
+.errorMessage button {
   text-decoration: underline;
   text-decoration-thickness: 2px;
 }
