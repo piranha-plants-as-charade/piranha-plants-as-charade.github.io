@@ -34,7 +34,7 @@ body[data-theme="dark"] .container {
   --button-lightness: 0.5;
 }
 
-.container {
+.main {
   position: relative;
   text-align: center;
   height: 96px;
@@ -91,60 +91,56 @@ body[data-theme="dark"] .container {
   color: var(--button-color);
 }
 .errorMessage::before {
-  content: '\e000';
+  content: "\e000";
 }
 
-.container[data-state="loading"] > .recordButton::before {
+.container[data-state="loading"] .recordButton::before {
   content: "";
 }
-.container[data-state="loading"] > .recordButton::after {
+.container[data-state="loading"] .recordButton::after {
   content: "Loading...";
 }
 
-.container[data-state="readyToRecord"] > .recordButton::before {
+.container[data-state="readyToRecord"] .recordButton::before {
   content: "\e837";
 }
-.container[data-state="readyToRecord"] > .recordButton::after {
+.container[data-state="readyToRecord"] .recordButton::after {
   content: "Record";
 }
 
-.container[data-state="recording"] > .recordButton::before {
+.container[data-state="recording"] .recordButton::before {
   content: "\e047";
 }
-.container[data-state="recording"] > .recordButton::after {
+.container[data-state="recording"] .recordButton::after {
   content: "Stop";
 }
 
-.container[data-state="generating"] > .recordButton::before {
+.container[data-state="generating"] .recordButton::before {
   content: "";
 }
-.container[data-state="generating"] > .recordButton::after {
+.container[data-state="generating"] .recordButton::after {
   content: "Piranha-fiying Song...";
 }
 
-.container[data-state="paused"] > .recordButton::before {
+.container[data-state="paused"] .recordButton::before {
   content: "\e037";
 }
-.container[data-state="paused"] > .recordButton::after {
+.container[data-state="paused"] .recordButton::after {
   content: "Play";
 }
 
-.container[data-state="playing"] > .recordButton::before {
+.container[data-state="playing"] .recordButton::before {
   content: "\e034";
 }
-.container[data-state="playing"] > .recordButton::after {
+.container[data-state="playing"] .recordButton::after {
   content: "Pause";
 }
 
 .tryAgainButton {
-  user-select: auto;
-  -moz-user-select: auto;
-  display: inline;
-  padding: 0;
-  margin: 0;
-  background: none;
-  border: none;
-  color: inherit;
   text-decoration: underline;
   text-decoration-thickness: 2px;
+}
+
+.uploadFileButton::before {
+  content: "\f09b";
 }
