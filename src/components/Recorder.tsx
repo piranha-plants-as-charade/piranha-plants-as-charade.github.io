@@ -57,11 +57,41 @@ const Recorder = ({
   const [errorMessage, setErrorMessage] = useState<ReactNode>(<></>);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const mainRef = useRef<HTMLDivElement | null>(null);
+  const inputFileRef = useRef<HTMLInputElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const visualizerRef = useRef<HTMLCanvasElement | null>(null);
   const audioStream = useRef<MediaStream | null>(null);
   const mediaRecorder = useRef<MediaRecorder | null>(null);
   const recordedChunks = useRef<Blob[]>([]);
+
+  const generate = async (getFileFn: () => File) => {
+    setState(State.Generating);
+    try {
+      const file = getFileFn();
+      const generated = await fetchGenerate(file);
+      const url = window.URL.createObjectURL(
+        new Blob([generated], { type: "audio/wav" })
+      );
+      setDownloadURL(url);
+      setState(State.Paused);
+    } catch {
+      setErrorMessage(
+        <span>
+          Something went wrong.{" "}
+          <button
+            className={cls("ghost-button", styles.tryAgainButton)}
+            onClick={() => {
+              setState(State.ReadyToRecord);
+            }}
+          >
+            Try again?
+          </button>
+        </span>
+      );
+      setState(State.Error);
+    }
+  };
 
   const getLineColor = () => {
     if (!containerRef.current) {
@@ -140,33 +170,11 @@ const Recorder = ({
     };
 
     recorder.onstop = async () => {
-      setState(State.Generating);
-      try {
-        const file = createFileFromChunks(recordedChunks.current, "file.webm", {
-          type: recorder.mimeType,
+      generate(() => {
+        return createFileFromChunks(recordedChunks.current, "file.webm", {
+          type: mediaRecorder.current!.mimeType,
         });
-        const generated = await fetchGenerate(file);
-        const url = window.URL.createObjectURL(
-          new Blob([generated], { type: "audio/wav" })
-        );
-        setDownloadURL(url);
-        setState(State.Paused);
-      } catch {
-        setErrorMessage(
-          <span>
-            Something went wrong.{" "}
-            <button
-              className={styles.tryAgainButton}
-              onClick={() => {
-                mediaRecorder.current!.start();
-              }}
-            >
-              Try again?
-            </button>
-          </span>
-        );
-        setState(State.Error);
-      }
+      });
     };
     return recorder;
   };
@@ -196,21 +204,17 @@ const Recorder = ({
   const handleAudioPause = () => {
     setState(State.Paused);
   };
-  const handleAudioEnd = () => {
-    audioRef.current!.pause();
-    audioRef.current!.currentTime = 0;
-  };
 
   useEffect(() => {
-    if (stateRef.current == State.Recording) {
+    if (state == State.Recording) {
       visualizeAudioStream();
     }
-  }, [stateRef.current]);
+  }, [state]);
 
   useEffect(() => {
     const resizeVisualizer = () => {
-      visualizerRef.current!.width = containerRef.current!.offsetWidth;
-      visualizerRef.current!.height = containerRef.current!.offsetHeight;
+      visualizerRef.current!.width = mainRef.current!.offsetWidth;
+      visualizerRef.current!.height = mainRef.current!.offsetHeight;
     };
     window.onresize = resizeVisualizer;
     resizeVisualizer();
@@ -237,23 +241,49 @@ const Recorder = ({
       className={styles.container}
       data-state={state.valueOf()}
     >
-      {state !== State.Error && (
+      <div ref={mainRef} className={styles.main}>
+        {state !== State.Error && (
+          <button
+            className={cls("icon", styles.recordButton)}
+            onClick={handleButtonClick}
+            disabled={state === State.Loading || state === State.Generating}
+          />
+        )}
+        {state === State.Error && (
+          <span className={cls("icon", styles.errorMessage)}>
+            {errorMessage}
+          </span>
+        )}
+        <canvas ref={visualizerRef} className={styles.visualizer} />
+      </div>
+      {state === State.ReadyToRecord && (
         <button
-          className={cls("icon", styles.recordButton)}
-          onClick={handleButtonClick}
-          disabled={state === State.Loading || state === State.Generating}
-        />
+          className={cls("icon", "ghost-button", styles.uploadFileButton)}
+          onClick={() => {
+            inputFileRef.current!.click();
+          }}
+        >
+          Or upload a file
+        </button>
       )}
-      {state === State.Error && (
-        <span className={cls("icon", styles.errorMessage)}>{errorMessage}</span>
-      )}
-      <canvas ref={visualizerRef} className={styles.visualizer} />
+      <input
+        ref={inputFileRef}
+        type="file"
+        accept="audio/*"
+        required={true}
+        multiple={false}
+        style={{ display: "none" }}
+        onChange={(event) => {
+          generate(() => {
+            return event.target.files![0];
+          });
+        }}
+      />
       <audio
         ref={audioRef}
         src={downloadURL}
         onPlay={handleAudioPlay}
         onPause={handleAudioPause}
-        onEnded={handleAudioEnd}
       />
     </div>
   );
