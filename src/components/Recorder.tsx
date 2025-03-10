@@ -1,14 +1,15 @@
 import { default as cls } from "classnames";
-import { useRef, useEffect, useReducer } from "react";
+import { useRef, useEffect, useState, useReducer, ReactNode } from "react";
 import styles from "@/styles/Recorder.module.css";
 
-enum RecordingState {
+enum State {
   Loading = "loading",
   ReadyToRecord = "readyToRecord",
   Recording = "recording",
   Generating = "generating",
   Paused = "paused",
   Playing = "playing",
+  Error = "error",
 }
 
 const createFileFromChunks = (
@@ -25,9 +26,15 @@ const fetchGenerate = async (file: File) => {
   formData.append("file", file);
 
   const response = await fetch("http://localhost:8000/generate", {
+    headers: {
+      Authorization: "Bearer " + (process.env.NEXT_PUBLIC_BE_AUTH_TOKEN ?? ""), // FIXME: secure this?
+    },
     method: "POST",
     body: formData,
   });
+  if (response.status !== 200) {
+    throw new Error("Failed to generate accompaniment.");
+  }
   return await response.bytes();
 };
 
@@ -42,14 +49,12 @@ const Recorder = ({
   downloadURL,
   setDownloadURL,
 }: RecorderProps) => {
-  const recordingStateRef = useRef<RecordingState>(RecordingState.Loading);
-  const [recordingState, setRecordingState] = useReducer(
-    (prev, val: RecordingState) => {
-      recordingStateRef.current = val;
-      return val;
-    },
-    RecordingState.Loading
-  );
+  const stateRef = useRef<State>(State.Loading);
+  const [state, setState] = useReducer((prev, val: State) => {
+    stateRef.current = val;
+    return val;
+  }, State.Loading);
+  const [errorMessage, setErrorMessage] = useState<ReactNode>(<></>);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -62,9 +67,8 @@ const Recorder = ({
     if (!containerRef.current) {
       return "black";
     }
-    return getComputedStyle(containerRef.current).getPropertyValue(
-      "--button-color"
-    );
+    const computedStyle = getComputedStyle(containerRef.current);
+    return computedStyle.getPropertyValue("--button-color");
   };
 
   const visualizeAudioStream = () => {
@@ -79,21 +83,21 @@ const Recorder = ({
     source.connect(analyser);
 
     const draw = () => {
-      requestAnimationFrame(draw);
-
       const { width, height } = visualizerRef.current!;
 
-      analyser.getByteTimeDomainData(dataArray);
-
       canvasCtx.clearRect(0, 0, width, height);
+
+      if (stateRef.current !== State.Recording) {
+        return;
+      }
+
+      requestAnimationFrame(draw);
+
+      analyser.getByteTimeDomainData(dataArray);
 
       canvasCtx.lineWidth = 2;
       canvasCtx.lineJoin = "round";
       canvasCtx.strokeStyle = getLineColor();
-
-      if (recordingStateRef.current !== RecordingState.Recording) {
-        return;
-      }
 
       canvasCtx.beginPath();
 
@@ -126,7 +130,7 @@ const Recorder = ({
     recordedChunks.current = [];
 
     recorder.onstart = () => {
-      setRecordingState(RecordingState.Recording);
+      setState(State.Recording);
     };
 
     recorder.ondataavailable = (event: BlobEvent) => {
@@ -136,33 +140,49 @@ const Recorder = ({
     };
 
     recorder.onstop = async () => {
-      setRecordingState(RecordingState.Generating);
-
-      const file = createFileFromChunks(recordedChunks.current, "file.webm", {
-        type: recorder.mimeType,
-      });
-      const url = window.URL.createObjectURL(
-        new Blob([await fetchGenerate(file)], { type: "audio/wav" })
-      );
-      setDownloadURL(url);
-
-      setRecordingState(RecordingState.Paused);
+      setState(State.Generating);
+      try {
+        const file = createFileFromChunks(recordedChunks.current, "file.webm", {
+          type: recorder.mimeType,
+        });
+        const generated = await fetchGenerate(file);
+        const url = window.URL.createObjectURL(
+          new Blob([generated], { type: "audio/wav" })
+        );
+        setDownloadURL(url);
+        setState(State.Paused);
+      } catch {
+        setErrorMessage(
+          <span>
+            Something went wrong.{" "}
+            <button
+              className={styles.tryAgainButton}
+              onClick={() => {
+                mediaRecorder.current!.start();
+              }}
+            >
+              Try again?
+            </button>
+          </span>
+        );
+        setState(State.Error);
+      }
     };
     return recorder;
   };
 
   const handleButtonClick = () => {
-    switch (recordingState) {
-      case RecordingState.ReadyToRecord:
+    switch (state) {
+      case State.ReadyToRecord:
         mediaRecorder.current!.start();
         break;
-      case RecordingState.Recording:
+      case State.Recording:
         mediaRecorder.current!.stop();
         break;
-      case RecordingState.Paused:
+      case State.Paused:
         audioRef.current!.play();
         break;
-      case RecordingState.Playing:
+      case State.Playing:
         audioRef.current!.pause();
         break;
       default:
@@ -171,15 +191,21 @@ const Recorder = ({
   };
 
   const handleAudioPlay = () => {
-    setRecordingState(RecordingState.Playing);
+    setState(State.Playing);
   };
   const handleAudioPause = () => {
-    setRecordingState(RecordingState.Paused);
+    setState(State.Paused);
   };
   const handleAudioEnd = () => {
     audioRef.current!.pause();
     audioRef.current!.currentTime = 0;
   };
+
+  useEffect(() => {
+    if (stateRef.current == State.Recording) {
+      visualizeAudioStream();
+    }
+  }, [stateRef.current]);
 
   useEffect(() => {
     const resizeVisualizer = () => {
@@ -192,12 +218,16 @@ const Recorder = ({
 
   useEffect(() => {
     setTimeout(async () => {
-      audioStream.current = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-      });
-      visualizeAudioStream();
-      mediaRecorder.current = await createMediaRecorder();
-      setRecordingState(RecordingState.ReadyToRecord);
+      try {
+        audioStream.current = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
+        mediaRecorder.current = await createMediaRecorder();
+        setState(State.ReadyToRecord);
+      } catch {
+        setErrorMessage("Failed to initialize the recording process.");
+        setState(State.Error);
+      }
     }, 0);
   }, []);
 
@@ -205,16 +235,18 @@ const Recorder = ({
     <div
       ref={containerRef}
       className={styles.container}
-      data-state={recordingState.valueOf()}
+      data-state={state.valueOf()}
     >
-      <button
-        className={cls("icon", styles.recordButton)}
-        onClick={handleButtonClick}
-        disabled={
-          recordingState === RecordingState.Loading ||
-          recordingState === RecordingState.Generating
-        }
-      />
+      {state !== State.Error && (
+        <button
+          className={cls("icon", styles.recordButton)}
+          onClick={handleButtonClick}
+          disabled={state === State.Loading || state === State.Generating}
+        />
+      )}
+      {state === State.Error && (
+        <span className={cls("icon", styles.errorMessage)}>{errorMessage}</span>
+      )}
       <canvas ref={visualizerRef} className={styles.visualizer} />
       <audio
         ref={audioRef}

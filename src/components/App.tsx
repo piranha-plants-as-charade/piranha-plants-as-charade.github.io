@@ -37,7 +37,7 @@ const App = ({ showBlog }: AppProps) => {
           content='Music generation in the style of "Piranha Plants on Parade".'
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.png" />
       </Head>
       <Script
         src="https://www.maxhuang.dev/src/scripts/theme.js"

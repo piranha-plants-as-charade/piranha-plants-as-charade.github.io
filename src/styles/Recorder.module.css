@@ -40,16 +40,20 @@ body[data-theme="dark"] .container {
   height: 96px;
 }
 
-.container > .recordButton {
+.recordButton,
+.errorMessage {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
+  font-size: 20px;
+}
+
+.recordButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
   font-weight: 500;
   text-transform: uppercase;
   height: 48px;
@@ -62,25 +66,32 @@ body[data-theme="dark"] .container {
   white-space: nowrap;
 }
 
-.container > .recordButton:hover {
+.recordButton:hover {
   background-color: var(--button-color);
   color: white;
 }
 
-.container > .recordButton:active {
+.recordButton:active {
   background-color: var(--button-hover-color);
   border-color: var(--button-hover-color);
   color: white;
   box-shadow: 0 3px 15px 0 var(--button-shadow-hover-color);
 }
 
-.container > .recordButton:disabled {
+.recordButton:disabled {
   background-color: transparent;
   border: none;
   outline: none;
   box-shadow: none;
   cursor: auto;
   color: var(--dark-color);
+}
+
+.errorMessage {
+  color: var(--button-color);
+}
+.errorMessage::before {
+  content: '\e000';
 }
 
 .container[data-state="loading"] > .recordButton::before {
@@ -123,4 +134,17 @@ body[data-theme="dark"] .container {
 }
 .container[data-state="playing"] > .recordButton::after {
   content: "Pause";
+}
+
+.tryAgainButton {
+  user-select: auto;
+  -moz-user-select: auto;
+  display: inline;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
 }
