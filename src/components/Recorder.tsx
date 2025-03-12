@@ -256,10 +256,12 @@ const Recorder = ({
       <div ref={mainRef} className={styles.main}>
         {state !== State.Error && (
           <button
-            className={cls("icon", styles.recordButton)}
+            className={styles.recordButton}
             onClick={handleButtonClick}
             disabled={state === State.Loading || state === State.Generating}
-          />
+          >
+            <span className={styles.text} />
+          </button>
         )}
         {state === State.Error && (
           <span className={cls("icon", styles.errorMessage)}>

@@ -56,7 +56,7 @@ const AudioPlayer = ({ src }: AudioPlayerProps) => {
   return (
     <>
       <button
-        className={cls("icon", styles.button, playing ? styles.playing : null)}
+        className={cls(styles.button, playing ? styles.playing : null)}
         onClick={handleButtonClick}
       >
         <span ref={timeRef} className={styles.time}></span>
