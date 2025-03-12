@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0");
 @import url("https://www.maxhuang.dev/src/css/theme.css");
 
 * {
@@ -76,8 +76,10 @@ tr:nth-child(odd) > td {
 }
 
 .icon::before {
+  position: relative;
+  bottom: -0.125em;
   display: inline;
-  vertical-align: bottom;
+  vertical-align: baseline;
   font-family: "Material Symbols Outlined";
   font-weight: normal;
   padding-right: 0.33em;

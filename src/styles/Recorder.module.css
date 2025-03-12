@@ -1,3 +1,21 @@
+@keyframes example {
+  0% {
+    content: "";
+  }
+  25% {
+    content: ".";
+  }
+  50% {
+    content: "..";
+  }
+  75% {
+    content: "...";
+  }
+  100% {
+    content: "";
+  }
+}
+
 .container {
   --button-hue: 3;
   --button-lightness: 1;
@@ -87,7 +105,25 @@ body[data-theme="dark"] .container {
   color: var(--dark-color);
 }
 
+.recordButton::before {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  padding-right: 0.33em;
+}
+
+.recordButton .text::before {
+  content: var(--text);
+}
+.recordButton:disabled .text::after {
+  position: absolute;
+  content: '';
+  animation: example 1.5s infinite;
+}
+
 .errorMessage {
+  padding: 0 32px;
+  width: 100%;
+  max-width: 720px;
   color: var(--button-color);
 }
 .errorMessage::before {
@@ -97,43 +133,43 @@ body[data-theme="dark"] .container {
 .container[data-state="loading"] .recordButton::before {
   content: "";
 }
-.container[data-state="loading"] .recordButton::after {
-  content: "Loading...";
+.container[data-state="loading"] .recordButton {
+  --text: "Loading";
 }
 
 .container[data-state="readyToRecord"] .recordButton::before {
   content: "\e837";
 }
-.container[data-state="readyToRecord"] .recordButton::after {
-  content: "Record";
+.container[data-state="readyToRecord"] .recordButton {
+  --text: "Record";
 }
 
 .container[data-state="recording"] .recordButton::before {
   content: "\e047";
 }
-.container[data-state="recording"] .recordButton::after {
-  content: "Stop";
+.container[data-state="recording"] .recordButton {
+  --text: "Stop";
 }
 
 .container[data-state="generating"] .recordButton::before {
   content: "";
 }
-.container[data-state="generating"] .recordButton::after {
-  content: "Piranha-fiying Song...";
+.container[data-state="generating"] .recordButton {
+  --text: "Piranha-fiying Song";
 }
 
 .container[data-state="paused"] .recordButton::before {
   content: "\e037";
 }
-.container[data-state="paused"] .recordButton::after {
-  content: "Play";
+.container[data-state="paused"] .recordButton {
+  --text: "Play";
 }
 
 .container[data-state="playing"] .recordButton::before {
   content: "\e034";
 }
-.container[data-state="playing"] .recordButton::after {
-  content: "Pause";
+.container[data-state="playing"] .recordButton {
+  --text: "pause";
 }
 
 .errorMessage button {
