@@ -15,7 +15,7 @@ const Demo = ({ showLearnMoreButton }: DemoProps) => {
       <div className={styles.title}>
         {/* Image source: https://www.pinclipart.com/downpngs/iomoxw_super-mario-clipart-piranha-plant-mario-piranha-plant/ */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/hero.png" alt="Logo" />
+        <img src="hero.png" alt="Logo" />
         <h1>Piranha Plants as Charade</h1>
       </div>
       <div className={styles.recorderWrapper}>
