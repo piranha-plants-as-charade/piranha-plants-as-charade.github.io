@@ -25,13 +25,16 @@ const fetchGenerate = async (file: File) => {
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await fetch("http://localhost:8000/generate", {
-    headers: {
-      Authorization: "Bearer " + (process.env.NEXT_PUBLIC_BE_AUTH_TOKEN ?? ""), // FIXME: secure this?
-    },
-    method: "POST",
-    body: formData,
-  });
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BE_BASE_URL!}/generate`,
+    {
+      headers: {
+        Authorization: "Bearer " + process.env.NEXT_PUBLIC_BE_AUTH_TOKEN!, // FIXME: secure this?
+      },
+      method: "POST",
+      body: formData,
+    }
+  );
   if (response.status !== 200) {
     throw new Error("Failed to generate accompaniment.");
   }
