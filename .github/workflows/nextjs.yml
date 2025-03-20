@@ -56,7 +56,7 @@ jobs:
       - name: Setup Pages
         # TODO: use actions version once fixed
         # uses: actions/configure-pages@v5
-        uses: TimPietrusky/configure-pages@main
+        uses: max-y-huang/configure-pages@main
         with:
           # Automatically inject basePath in your Next.js configuration file and disable
           # server side image optimization (https://nextjs.org/docs/api-reference/next/image#unoptimized).
