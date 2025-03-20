@@ -30,7 +30,6 @@ const fetchGenerate = async (file: File) => {
     {
       headers: {
         Authorization: "Bearer " + process.env.NEXT_PUBLIC_BE_AUTH_TOKEN!, // FIXME: secure this?
-        "Access-Control-Allow-Origin": "*",
       },
       method: "POST",
       body: formData,
