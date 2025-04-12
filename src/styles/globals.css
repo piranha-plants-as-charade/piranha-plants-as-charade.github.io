@@ -75,6 +75,26 @@ tr:nth-child(odd) > td {
   background-color: var(--extra-light-color);
 }
 
+figure {
+  background-color: var(--background-2-color);
+  padding: 24px;
+  padding-bottom: 16px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+}
+
+figure > img {
+  width: 100%;
+}
+
+figure > figcaption {
+  color: var(--dark-color);
+  margin-top: 16px;
+  text-align: center;
+  font-size: smaller;
+  font-style: italic;
+}
+
 .icon::before {
   position: relative;
   bottom: -0.125em;

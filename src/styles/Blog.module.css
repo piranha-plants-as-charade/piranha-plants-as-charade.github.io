@@ -1,7 +1,15 @@
+.header {
+  padding: 144px 0 96px 0;
+}
+
 .container {
   max-width: 720px;
   margin: 0 auto;
   text-align: left;
+}
+
+.logo {
+  height: 25vh;
 }
 
 .howItWorksSteps > li:not(:last-child) {
@@ -16,10 +24,13 @@
   border-bottom: none;
 }
 
-.footer .personalWebsite::before {
-  content: '\e88a';
+.footer .report::before {
+  content: "\e873";
+}
+.footer .github::before {
+  content: "\e86f";
 }
 
-.footer .linkedIn::before {
-  content: '\e7fd';
+.architectureFigure {
+  width: 100%;
 }

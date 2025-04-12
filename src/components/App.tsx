@@ -1,8 +1,7 @@
 import { default as cls } from "classnames";
+import { ReactNode } from "react";
 import Head from "next/head";
 import Script from "next/script";
-import { Demo } from "@/components/Demo";
-import { Blog } from "@/components/Blog";
 
 import { Open_Sans, Barrio } from "next/font/google";
 import styles from "@/styles/Home.module.css";
@@ -20,10 +19,10 @@ const barrio = Barrio({
 });
 
 interface AppProps {
-  showBlog?: boolean;
+  children?: ReactNode;
 }
 
-const App = ({ showBlog }: AppProps) => {
+const App = (props: AppProps) => {
   const handleInitTheme = async () => {
     eval("initTheme()");
   };
@@ -46,8 +45,7 @@ const App = ({ showBlog }: AppProps) => {
       <div
         className={cls(styles.container, openSans.variable, barrio.variable)}
       >
-        <Demo showLearnMoreButton={showBlog} />
-        {showBlog && <Blog />}
+        {props.children}
       </div>
     </>
   );

@@ -1,0 +1,31 @@
+.container {
+  --staff-color: color-mix(in srgb, var(--dark-color) 8%, transparent);
+  --staff-stroke-width: 3px;
+  --staff-spacing: calc(
+    (100% + var(--staff-stroke-width) + 1px) / 6
+  ); /* +1px as buffer */
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent calc(var(--staff-spacing) - var(--staff-stroke-width)),
+    var(--staff-color) calc(var(--staff-spacing) - var(--staff-stroke-width)),
+    var(--staff-color) var(--staff-spacing)
+  );
+}
+
+.lightLogo,
+.darkLogo {
+  display: none;
+  user-select: none;
+}
+
+body[data-theme="light"] .lightLogo {
+  display: block;
+}
+
+body[data-theme="dark"] .darkLogo {
+  display: block;
+}
