@@ -16,10 +16,6 @@
   margin-bottom: 0.5em;
 }
 
-.resultsTable {
-  margin: 1em auto;
-}
-
 .footer {
   border-bottom: none;
 }
@@ -33,4 +29,5 @@
 
 .architectureFigure {
   width: 100%;
+  padding: 24px;
 }

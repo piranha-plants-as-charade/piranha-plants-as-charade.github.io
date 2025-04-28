@@ -69,6 +69,7 @@ const AudioPlayer = ({ src }: AudioPlayerProps) => {
         onPause={handlePause}
         onEnded={handleEnd}
         onTimeUpdate={handleTimeUpdate}
+        onLoad={handleTimeUpdate}
       />
     </>
   );
