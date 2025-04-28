@@ -51,40 +51,53 @@ const Blog = () => {
           four-step music generation algorithm to transform the input melody.
         </p>
         <h3>Sample Results</h3>
-        <table className={styles.resultsTable}>
-          <tbody>
-            <tr>
-              <th>Song</th>
-              <th>Input</th>
-              <th>Output</th>
-            </tr>
-            <SampleRow
-              title="Piranha Plants on Parade"
-              url="//youtu.be/3EkzTUPoWMU?feature=shared&t=11"
-              directory="piranha"
-            />
-            <SampleRow
-              title="Saria's Song"
-              url="//youtu.be/fER8zIAhRD0?feature=shared&t=2"
-              directory="zelda"
-            />
-            <SampleRow
-              title="Eine Kleine Nachtmusik"
-              url="//youtu.be/oy2zDJPIgwc?feature=shared&t=4"
-              directory="mozart"
-            />
-            <SampleRow
-              title="Cherokee"
-              url="//youtu.be/M283JFxesic?feature=shared&t=33"
-              directory="cherokee"
-            />
-          </tbody>
-        </table>
+
+        <figure>
+          <div>
+            <table className={styles.resultsTable}>
+              <tbody>
+                <tr>
+                  <th>Song</th>
+                  <th>Input</th>
+                  <th>Output</th>
+                </tr>
+                <SampleRow
+                  title="Piranha Plants on Parade"
+                  url="//youtu.be/3EkzTUPoWMU?feature=shared&t=11"
+                  directory="piranha"
+                />
+                <SampleRow
+                  title="Saria's Song"
+                  url="//youtu.be/fER8zIAhRD0?feature=shared&t=2"
+                  directory="zelda"
+                />
+                <SampleRow
+                  title="Eine Kleine Nachtmusik"
+                  url="//youtu.be/oy2zDJPIgwc?feature=shared&t=4"
+                  directory="mozart"
+                />
+                <SampleRow
+                  title="Cherokee"
+                  url="//youtu.be/M283JFxesic?feature=shared&t=33"
+                  directory="cherokee"
+                />
+              </tbody>
+            </table>
+          </div>
+        </figure>
+
+        <p>
+          To contrast, here's what the "Piranha Plants on Parade" melody sounds
+          like with random chords:
+        </p>
+
+        <AudioPlayer src={`/sample-audio/bad-chords.wav`} />
+
         <h3>How it Works</h3>
         <figure className="card theme-light">
           <img
             className={styles.architectureFigure}
-            src="/architecture_figure.svg"
+            src="/architecture-figure.svg"
             alt="Architecture flowchart"
           />
           <figcaption>
@@ -135,7 +148,7 @@ const Blog = () => {
         <li>
           <a
             className={cls("icon", styles.report)}
-            href="//github.com/piranha-plants-as-charade/report/releases/download/v0.1.0/report.pdf"
+            href="/report.pdf"
             download={false}
             target="_blank"
           >
