@@ -50,7 +50,6 @@ table {
   border-radius: 5px;
   border-collapse: collapse;
   overflow: hidden;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   color: var(--dark-color);
 }
 
@@ -75,24 +74,30 @@ tr:nth-child(odd) > td {
 }
 
 figure {
-  padding-bottom: 16px;
+  --inner-padding: 10px;
+  margin-top: calc(1em - var(--inner-padding));
+  margin-bottom: calc(1em - var(--inner-padding));
+  margin-left: calc(40px - var(--inner-padding));
+  margin-right: calc(40px - var(--inner-padding));
 }
 
 figure > *:first-child {
   max-width: 100%;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   width: fit-content;
+  padding: var(--inner-padding);
   overflow-x: auto;
   margin: 0 auto;
 }
 
-figure > img:first-child {
+figure > *:first-child > * {
   background-color: var(--background-2-color);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   border-radius: 5px;
 }
 
 figure > figcaption {
   margin-top: 8px;
+  margin-bottom: 24px;
   text-align: center;
   font-size: smaller;
   font-style: italic;

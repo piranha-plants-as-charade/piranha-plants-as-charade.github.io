@@ -87,19 +87,21 @@ const Blog = () => {
         </figure>
 
         <p>
-          To contrast, here's what the "Piranha Plants on Parade" melody sounds
-          like with random chords:
+          To contrast, here&apos;s what the &ldquo;Piranha Plants on
+          Parade&rdquo; melody sounds like with random chords:
         </p>
 
         <AudioPlayer src={`/sample-audio/bad-chords.wav`} />
 
         <h3>How it Works</h3>
         <figure className="card theme-light">
-          <img
-            className={styles.architectureFigure}
-            src="/architecture-figure.svg"
-            alt="Architecture flowchart"
-          />
+          <div>
+            <img
+              className={styles.architectureFigure}
+              src="/architecture-figure.svg"
+              alt="Architecture flowchart"
+            />
+          </div>
           <figcaption>
             An overview of the architecture of Piranha Plants as Charade.
           </figcaption>
