@@ -96,6 +96,7 @@ const Blog = () => {
         <h3>How it Works</h3>
         <figure className="card theme-light">
           <div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               className={styles.architectureFigure}
               src="/architecture-figure.svg"
@@ -144,7 +145,6 @@ const Blog = () => {
             our two processes to get our final output.
           </li>
         </ol>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
       </div>
       <ul className={cls("link-section", styles.footer)}>
         <li>
