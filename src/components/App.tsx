@@ -1,7 +1,6 @@
 import { default as cls } from "classnames";
 import { ReactNode } from "react";
 import Head from "next/head";
-import Script from "next/script";
 
 import { Open_Sans, Barrio } from "next/font/google";
 import styles from "@/styles/Home.module.css";
@@ -23,10 +22,6 @@ interface AppProps {
 }
 
 const App = (props: AppProps) => {
-  const handleInitTheme = async () => {
-    eval("initTheme()");
-  };
-
   return (
     <>
       <Head>
@@ -38,10 +33,6 @@ const App = (props: AppProps) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="favicon.png" />
       </Head>
-      <Script
-        src="https://www.maxhuang.dev/src/scripts/theme.js"
-        onLoad={handleInitTheme}
-      />
       <div
         className={cls(styles.container, openSans.variable, barrio.variable)}
       >
