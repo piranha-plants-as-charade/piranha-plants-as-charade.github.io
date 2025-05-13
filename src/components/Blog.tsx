@@ -94,7 +94,7 @@ const Blog = () => {
         <AudioPlayer src={`/sample-audio/bad-chords.wav`} />
 
         <h3>How it Works</h3>
-        <figure className="card theme-light">
+        <figure className="card">
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

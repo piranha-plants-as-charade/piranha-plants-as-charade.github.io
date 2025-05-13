@@ -1,5 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0");
-@import url("https://www.maxhuang.dev/src/css/theme.css");
+
+:root {
+  --background-color: #f5f5f5;
+  --background-2-color: #fcfcfc;
+  --dark-color: #444;
+  --medium-color: #7b7b7b;
+  --light-color: #aaa;
+  --extra-light-color: #e8e8e8;
+  --accent-1-color: darkorchid;
+  --accent-2-color: darkcyan;
+  --accent-3-color: darkgoldenrod;
+}
 
 * {
   box-sizing: border-box;
