@@ -22,10 +22,6 @@
   user-select: none;
 }
 
-body[data-theme="light"] .lightLogo {
-  display: block;
-}
-
-body[data-theme="dark"] .darkLogo {
+.lightLogo {
   display: block;
 }
